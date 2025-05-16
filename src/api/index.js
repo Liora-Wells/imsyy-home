@@ -53,23 +53,46 @@ export const getHitokoto = async () => {
  * 天气
  */
 
-// 获取高德地理位置信息
-export const getAdcode = async (key) => {
-  const res = await fetch(`https://restapi.amap.com/v3/ip?key=${key}`);
-  return await res.json();
+// 获取地理位置信息，使用新接口
+export const getAdcode = async (ip = '') => {
+  const url = new URL('https://node.api.xfabe.com/api/weather/get');
+  if (ip) {
+    url.searchParams.append('ip', ip);
+  }
+
+  const res = await fetch(url);
+  const data = await res.json();
+  
+  if (data.code === 200) {
+    return {
+      city: data.data.city,
+      path: data.data.path,
+      country: data.data.country
+    };
+  } else {
+    throw new Error(data.msg || '获取地理位置信息失败');
+  }
 };
 
-// 获取高德地理天气信息
-export const getWeather = async (key, city) => {
-  const res = await fetch(
-    `https://restapi.amap.com/v3/weather/weatherInfo?key=${key}&city=${city}`,
-  );
-  return await res.json();
+
+
+// 修改获取天气信息的接口为新 API
+export const getWeather = async (ip = '', days = 1) => {
+  const url = new URL('https://node.api.xfabe.com/api/weather/get');
+  if (ip) {
+    url.searchParams.append('ip', ip);
+  }
+  if (days) {
+    url.searchParams.append('day', days);
+  }
+
+  const res = await fetch(url);
+  const data = await res.json();
+  
+  if (data.code === 200) {
+    return data.data;
+  } else {
+    throw new Error(data.msg || '获取天气信息失败');
+  }
 };
 
-// 获取教书先生天气 API
-// https://api.oioweb.cn/doc/weather/GetWeather
-export const getOtherWeather = async () => {
-  const res = await fetch("https://api.oioweb.cn/api/weather/GetWeather");
-  return await res.json();
-};
