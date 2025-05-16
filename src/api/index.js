@@ -53,28 +53,15 @@ export const getHitokoto = async () => {
  * 天气
  */
 
-// 获取地理位置信息，使用新接口
+// 保留 getAdcode 函数名，复用 getWeather 函数获取城市信息
 export const getAdcode = async (ip = '') => {
-  const url = new URL('https://node.api.xfabe.com/api/weather/get');
-  if (ip) {
-    url.searchParams.append('ip', ip);
-  }
-
-  const res = await fetch(url);
-  const data = await res.json();
-  
-  if (data.code === 200) {
-    return {
-      city: data.data.city,
-      path: data.data.path,
-      country: data.data.country
-    };
-  } else {
-    throw new Error(data.msg || '获取地理位置信息失败');
-  }
+  const weatherData = await getWeather(ip, 1);
+  return {
+    city: weatherData.city,
+    path: weatherData.path,
+    country: weatherData.country
+  };
 };
-
-
 
 // 修改获取天气信息的接口为新 API
 export const getWeather = async (ip = '', days = 1) => {
