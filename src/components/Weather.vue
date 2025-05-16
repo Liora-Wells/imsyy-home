@@ -21,7 +21,8 @@
 import { reactive, onMounted } from "vue";
 import { getAdcode, getWeather } from "@/api";
 import { Error } from "@icon-park/vue-next";
-import { ElMessage, h } from "element-plus";
+import { ElMessage } from "element-plus";
+import { h } from "vue";
 
 // 高德开发者 Key
 const mainKey = import.meta.env.VITE_WEATHER_KEY;
